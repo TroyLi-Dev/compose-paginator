@@ -82,7 +82,7 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
     }
 
     internal suspend fun collectPagingData() {
-        state.collectLatest { state ->
+        state.collect { state ->
             items = state.items
             totalItemCount = state.items.size
             isRefreshing = state.isRefreshing
