@@ -83,13 +83,8 @@ class Paginator<T, P> private constructor(
 
     fun refresh() {
         log("开始刷新")
-        if (refreshJob?.isActive == true) {
-            log("已有刷新任务进行中，忽略新的刷新请求")
-            return
-        }
         refreshJob?.cancel()
         loadMoreJob?.cancel()
-
         refreshJob = scope.launch {
             loadMutex.withLock {
                 state.update {
@@ -120,15 +115,16 @@ class Paginator<T, P> private constructor(
                         }
                     }
                 } catch (t: Throwable) {
+                    ensureActive()
                     log("刷新失败：${t.localizedMessage}")
                     state.update {
                         it.copy(
                             updateTime= System.currentTimeMillis(),
                             isRefreshing = false,
-                            refreshError = t
+                            refreshError = t,
+                            isEndReached = true
                         )
                     }
-                    ensureActive()
                 }
             }
         }
@@ -172,6 +168,7 @@ class Paginator<T, P> private constructor(
                         }
                     }
                 } catch (t: Throwable) {
+                    ensureActive()
                     log("加载更多失败：${t.localizedMessage}")
                     state.update {
                         it.copy(
@@ -180,7 +177,6 @@ class Paginator<T, P> private constructor(
                             loadMoreError = t
                         )
                     }
-                    ensureActive()
                 }
             }
         }

@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 
 /**
  * @author: rui
@@ -64,6 +63,9 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
     var visibleLoadMoreErrorStateView: Boolean by mutableStateOf(value = false)
         private set
 
+    var visibleEndReachedStateView: Boolean by mutableStateOf(value = false)
+        private set
+
 
     operator fun get(index: Int): T? {
         prefetchLoadIfNeed(index = index)
@@ -92,11 +94,18 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
             isEndReached = state.isEndReached
             bottomReachedLoadMore = state.bottomReachedLoadMore
 
-            val completedAndEmpty = (isEndReached || totalItemCount == 0)
             visibleLoadingStateView = isLoadingMore
-            visibleRefreshErrorStateView = refreshError != null && completedAndEmpty
-            visibleEmptyStateView = !visibleRefreshErrorStateView && completedAndEmpty
-            visibleLoadMoreErrorStateView = loadMoreError != null && totalItemCount != 0
+
+            visibleRefreshErrorStateView =
+                refreshError != null && isEndReached && totalItemCount == 0
+
+            visibleEmptyStateView =
+                !visibleRefreshErrorStateView && isEndReached && totalItemCount == 0
+
+            visibleLoadMoreErrorStateView =
+                loadMoreError != null && totalItemCount != 0
+
+            visibleEndReachedStateView = isEndReached && totalItemCount != 0
 
             if (totalItemCount == 0 && bottomReachedLoadMore) {
                 bottomReachedLoadMore = false
