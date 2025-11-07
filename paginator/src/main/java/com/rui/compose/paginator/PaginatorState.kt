@@ -1,11 +1,14 @@
 package com.rui.compose.paginator
 
+import androidx.compose.runtime.Stable
+
 /**
  * @author: rui
  * @date: 2025/10/10 14:42
  * @description: 状态
  * Copyright (c) 2025 All rights reserved.
  */
+@Stable
 data class PaginatorState<T>(
     val items: List<T> = emptyList(),
     val isRefreshing: Boolean = false,
@@ -14,4 +17,5 @@ data class PaginatorState<T>(
     val loadMoreError: Throwable? = null,
     val isEndReached: Boolean = false,
     internal val bottomReachedLoadMore: Boolean = false,
+    internal val updateTime: Long=0
 )
