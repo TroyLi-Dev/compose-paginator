@@ -92,6 +92,7 @@ class Paginator<T, P> private constructor(
                         updateTime = System.currentTimeMillis(),
                         isRefreshing = true,
                         refreshError = null,
+                        isLoadingMore = false,
                         loadMoreError = null,
                         bottomReachedLoadMore = false
                     )
