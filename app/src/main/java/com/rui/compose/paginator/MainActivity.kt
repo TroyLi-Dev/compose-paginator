@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,6 +82,9 @@ class MainActivity : ComponentActivity() {
                 refreshing = lazyPagingItems.isRefreshing,
                 onRefresh = paginator::refresh
             )
+            LaunchedEffect("") {
+                paginator.refresh()
+            }
             MaterialTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -222,7 +226,7 @@ class MainActivity : ComponentActivity() {
                                                         paginator.retry()
                                                     }),
                                                 color = Color(0xFFFF0000),
-                                                text = "重试",
+                                                text = "重试加载更多",
                                             )
                                         }
                                     }

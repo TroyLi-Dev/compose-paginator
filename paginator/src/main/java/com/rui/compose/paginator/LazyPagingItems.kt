@@ -84,6 +84,7 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
 
     internal suspend fun collectPagingData() {
         state.collect { state ->
+            items = state.items
             totalItemCount = state.items.size
             isRefreshing = state.isRefreshing
             isLoadingMore = state.isLoadingMore
@@ -98,7 +99,8 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
             visibleEmptyStateItem =
                 refreshError == null &&
                         isEndReached &&
-                        totalItemCount == 0
+                        totalItemCount == 0 &&
+                        !isRefreshing
 
             visibleLoadingStateItem =
                 isLoadingMore &&
@@ -108,8 +110,7 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
                         !isEndReached
 
             visibleLoadMoreErrorStateItem =
-                loadMoreError != null &&
-                        totalItemCount > 0
+                loadMoreError != null
 
             visibleEndReachedStateItem =
                 isEndReached &&
