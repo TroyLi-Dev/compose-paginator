@@ -51,22 +51,6 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
     internal var bottomReachedLoadMore: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleEmptyStateItem: Boolean by mutableStateOf(value = false)
-        private set
-
-    var visibleRefreshErrorStateItem: Boolean by mutableStateOf(value = false)
-        private set
-
-    var visibleLoadingStateItem: Boolean by mutableStateOf(value = false)
-        private set
-
-    var visibleLoadMoreErrorStateItem: Boolean by mutableStateOf(value = false)
-        private set
-
-    var visibleEndReachedStateItem: Boolean by mutableStateOf(value = false)
-        private set
-
-
     operator fun get(index: Int): T? {
         prefetchLoadIfNeed(index = index)
         return items.getOrNull(index)
@@ -85,23 +69,13 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
 
     internal suspend fun collectPagingData() {
         state.collect { state ->
-            totalItemCount =  state.items.size
+            totalItemCount = state.items.size
             isRefreshing = state.isRefreshing
             isLoadingMore = state.isLoadingMore
             refreshError = state.refreshError
             loadMoreError = state.loadMoreError
             isEndReached = state.isEndReached
             bottomReachedLoadMore = state.bottomReachedLoadMore
-
-            visibleLoadingStateItem = isLoadingMore && !isRefreshing && refreshError==null && !isEndReached && loadMoreError==null
-
-            visibleRefreshErrorStateItem = refreshError != null && totalItemCount == 0
-
-            visibleEmptyStateItem = !visibleRefreshErrorStateItem && isEndReached && totalItemCount == 0
-
-            visibleLoadMoreErrorStateItem = loadMoreError != null && totalItemCount != 0
-
-            visibleEndReachedStateItem = isEndReached && totalItemCount != 0
 
             if (totalItemCount == 0 && bottomReachedLoadMore) {
                 bottomReachedLoadMore = false
