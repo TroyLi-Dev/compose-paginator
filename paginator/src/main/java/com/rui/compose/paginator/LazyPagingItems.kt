@@ -94,16 +94,13 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
             isEndReached = state.isEndReached
             bottomReachedLoadMore = state.bottomReachedLoadMore
 
-            visibleLoadingStateView = isLoadingMore
+            visibleLoadingStateView = isLoadingMore && !state.isRefreshing && state.refreshError==null && !state.isEndReached
 
-            visibleRefreshErrorStateView =
-                refreshError != null && isEndReached && totalItemCount == 0
+            visibleRefreshErrorStateView = refreshError != null && isEndReached && totalItemCount == 0
 
-            visibleEmptyStateView =
-                !visibleRefreshErrorStateView && isEndReached && totalItemCount == 0
+            visibleEmptyStateView = !visibleRefreshErrorStateView && isEndReached && totalItemCount == 0
 
-            visibleLoadMoreErrorStateView =
-                loadMoreError != null && totalItemCount != 0
+            visibleLoadMoreErrorStateView = loadMoreError != null && totalItemCount != 0
 
             visibleEndReachedStateView = isEndReached && totalItemCount != 0
 
