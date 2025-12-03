@@ -51,19 +51,19 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
     internal var bottomReachedLoadMore: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleEmptyStateView: Boolean by mutableStateOf(value = false)
+    var visibleEmptyStateItem: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleRefreshErrorStateView: Boolean by mutableStateOf(value = false)
+    var visibleRefreshErrorStateItem: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleLoadingStateView: Boolean by mutableStateOf(value = false)
+    var visibleLoadingStateItem: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleLoadMoreErrorStateView: Boolean by mutableStateOf(value = false)
+    var visibleLoadMoreErrorStateItem: Boolean by mutableStateOf(value = false)
         private set
 
-    var visibleEndReachedStateView: Boolean by mutableStateOf(value = false)
+    var visibleEndReachedStateItem: Boolean by mutableStateOf(value = false)
         private set
 
 
@@ -85,8 +85,7 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
 
     internal suspend fun collectPagingData() {
         state.collect { state ->
-            items = state.items
-            totalItemCount = state.items.size
+            totalItemCount =  state.items.size
             isRefreshing = state.isRefreshing
             isLoadingMore = state.isLoadingMore
             refreshError = state.refreshError
@@ -94,15 +93,15 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
             isEndReached = state.isEndReached
             bottomReachedLoadMore = state.bottomReachedLoadMore
 
-            visibleLoadingStateView = isLoadingMore && !state.isRefreshing && state.refreshError==null && !state.isEndReached
+            visibleLoadingStateItem = isLoadingMore && !isRefreshing && refreshError==null && !isEndReached && loadMoreError==null
 
-            visibleRefreshErrorStateView = refreshError != null && isEndReached && totalItemCount == 0
+            visibleRefreshErrorStateItem = refreshError != null && totalItemCount == 0
 
-            visibleEmptyStateView = !visibleRefreshErrorStateView && isEndReached && totalItemCount == 0
+            visibleEmptyStateItem = !visibleRefreshErrorStateItem && isEndReached && totalItemCount == 0
 
-            visibleLoadMoreErrorStateView = loadMoreError != null && totalItemCount != 0
+            visibleLoadMoreErrorStateItem = loadMoreError != null && totalItemCount != 0
 
-            visibleEndReachedStateView = isEndReached && totalItemCount != 0
+            visibleEndReachedStateItem = isEndReached && totalItemCount != 0
 
             if (totalItemCount == 0 && bottomReachedLoadMore) {
                 bottomReachedLoadMore = false
