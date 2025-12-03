@@ -48,6 +48,21 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
     var isEndReached: Boolean by mutableStateOf(value = false)
         private set
 
+    var visibleRefreshErrorStateItem: Boolean by mutableStateOf(value = false)
+        private set
+
+    var visibleEmptyStateItem: Boolean by mutableStateOf(value = false)
+        private set
+
+    var visibleLoadingStateItem: Boolean by mutableStateOf(value = false)
+        private set
+
+    var visibleLoadMoreErrorStateItem: Boolean by mutableStateOf(value = false)
+        private set
+
+    var visibleEndReachedStateItem: Boolean by mutableStateOf(value = false)
+        private set
+
     internal var bottomReachedLoadMore: Boolean by mutableStateOf(value = false)
         private set
 
@@ -76,6 +91,30 @@ class LazyPagingItems<T>(private val paginator: Paginator<T, *>) {
             loadMoreError = state.loadMoreError
             isEndReached = state.isEndReached
             bottomReachedLoadMore = state.bottomReachedLoadMore
+
+            visibleRefreshErrorStateItem =
+                refreshError != null && totalItemCount == 0
+
+            visibleEmptyStateItem =
+                refreshError == null &&
+                        isEndReached &&
+                        totalItemCount == 0
+
+            visibleLoadingStateItem =
+                isLoadingMore &&
+                        !isRefreshing &&
+                        refreshError == null &&
+                        loadMoreError == null &&
+                        !isEndReached
+
+            visibleLoadMoreErrorStateItem =
+                loadMoreError != null &&
+                        totalItemCount > 0
+
+            visibleEndReachedStateItem =
+                isEndReached &&
+                        totalItemCount > 0 &&
+                        loadMoreError == null
 
             if (totalItemCount == 0 && bottomReachedLoadMore) {
                 bottomReachedLoadMore = false

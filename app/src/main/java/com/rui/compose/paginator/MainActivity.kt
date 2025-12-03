@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                     text = item
                                 )
                             }
-                            if (lazyPagingItems.visibleLoadingStateView) {
+                            if (lazyPagingItems.visibleLoadingStateItem) {
                                 //加载更多
                                 item(
                                     key = "LoadMoreStatePage",
@@ -158,7 +158,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                            if (lazyPagingItems.visibleEmptyStateView) {
+                            if (lazyPagingItems.visibleEmptyStateItem) {
                                 item(
                                     key = "EmptyStatePage",
                                     contentType = "EmptyStatePage",
@@ -175,7 +175,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                            if (lazyPagingItems.visibleRefreshErrorStateView) {
+                            if (lazyPagingItems.visibleRefreshErrorStateItem) {
                                 item(
                                     key = "RefreshErrorStatePage",
                                     contentType = "RefreshErrorStatePage",
@@ -192,7 +192,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                            if (lazyPagingItems.visibleLoadMoreErrorStateView) {
+                            if (lazyPagingItems.visibleLoadMoreErrorStateItem) {
                                 item(
                                     key = "LoadMoreFailureStatePage",
                                     contentType = "LoadMoreFailureStatePage",
