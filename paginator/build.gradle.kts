@@ -10,7 +10,7 @@ plugins {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            groupId = "com.github.troyli-dev"
+            groupId = "com.github.TroyLi-Dev"
             artifactId = "compose-paginator"
             version = project.version as String? ?: "unspecified"
             afterEvaluate {
