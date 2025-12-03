@@ -23,7 +23,7 @@ Step 2. Add the dependency
 ```
 
 	dependencies {
-	        implementation 'com.github.troyli-dev:compose-paginator:Tag'
+	        implementation 'com.github.TroyLi-Dev:compose-paginator:Tag'
 	}
 
 ```
